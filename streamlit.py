@@ -1,22 +1,23 @@
 import streamlit as st
-import tensorflow as tf
-from PIL import Image
+import joblib
 import numpy as np
 
-model = tf.keras.models.load_model("fruit_classifier.h5")
-class_names = ['Apple', 'Banana', 'Orange']  # Sesuaikan dengan label asli
+model = joblib.load("diabetes_model.pkl")
 
-st.title("Klasifikasi Buah dengan CNN")
+st.title("Prediksi Diabetes - Pima Dataset")
 
-uploaded = st.file_uploader("Upload gambar buah...", type=["jpg", "png"])
+# Input Features
+preg = st.number_input("Jumlah Kehamilan", min_value=0)
+glu = st.number_input("Glukosa", min_value=0)
+bp = st.number_input("Tekanan Darah", min_value=0)
+skin = st.number_input("Tebal Kulit", min_value=0)
+insulin = st.number_input("Insulin", min_value=0)
+bmi = st.number_input("BMI", min_value=0.0)
+dpf = st.number_input("Diabetes Pedigree Function", min_value=0.0)
+age = st.number_input("Usia", min_value=1)
 
-if uploaded:
-    image = Image.open(uploaded).resize((100, 100))
-    st.image(image, caption="Gambar yang Diunggah", use_column_width=True)
-
-    img_array = np.expand_dims(np.array(image)/255.0, axis=0)
-    prediction = model.predict(img_array)
-    predicted_class = class_names[np.argmax(prediction)]
-
-    st.success(f"Prediksi: {predicted_class}")
-
+if st.button("Prediksi"):
+    input_data = np.array([[preg, glu, bp, skin, insulin, bmi, dpf, age]])
+    prediction = model.predict(input_data)[0]
+    hasil = "POSITIF Diabetes" if prediction == 1 else "NEGATIF Diabetes"
+    st.success(f"Hasil Prediksi: {hasil}")
