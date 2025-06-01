@@ -6,7 +6,7 @@ import numpy as np
 model = tf.keras.models.load_model("fruit_classifier.h5")
 class_names = ['Apple', 'Banana', 'Orange']  # Sesuaikan dengan label asli
 
-st.title("🍎 Klasifikasi Buah dengan CNN")
+st.title("Klasifikasi Buah dengan CNN")
 
 uploaded = st.file_uploader("Upload gambar buah...", type=["jpg", "png"])
 
